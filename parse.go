@@ -268,10 +268,24 @@ func (opt *Options) ParseArgs(args []string) error {
 
 	// Parse the remaining unknown arguments as positional arguments, if applicable.
 	for _, arg := range unknown {
-		fmt.Printf("positional arg: %s\n", arg)
+		if arg != "" {
+		}
 		unknown = unknown[1:]
 	}
 	opt.Remainder = unknown
+
+	for _, o := range opt.short {
+		if o.Required && o.Value == nil {
+			return fmt.Errorf("-%s: %w", o.ShortName, ErrMissingRequired)
+		}
+	}
+
+	for _, o := range opt.long {
+		if o.Required && o.Value == nil {
+			return fmt.Errorf("--%s: %w", o.LongName, ErrMissingRequired)
+		}
+	}
+
 	return nil
 }
 
