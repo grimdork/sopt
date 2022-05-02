@@ -218,6 +218,32 @@ func (opt *Options) ParseArgs(args []string) error {
 							o.Value = v
 							continue
 						}
+
+						return fmt.Errorf("-%c: %w", c, ErrMissingArgument)
+
+					case VarTypeFloat:
+						if a[0] == string(c) && a[1] != "" {
+							v, err := strconv.ParseFloat(a[1], 64)
+							if err != nil {
+								return err
+							}
+
+							o.Value = v
+							continue
+						}
+
+						if len(args) > i+1 {
+							v, err := strconv.ParseFloat(args[i+1], 64)
+							if err != nil {
+								return err
+							}
+
+							o.Value = v
+							continue
+						}
+
+						return fmt.Errorf("-%c: %w", c, ErrMissingArgument)
+
 					} // switch o.Type
 				} else {
 					return ErrUnknownOption
