@@ -155,7 +155,7 @@ func (opt *Options) ParseArgs(args []string) error {
 					return fmt.Errorf("--%s: %w", o.LongName, ErrUnknownType)
 				} // switch o.Type
 			} else {
-				return ErrUnknownOption
+				return fmt.Errorf("--%s: %w", a[0], ErrUnknownOption)
 			} // if long option is defined
 			continue
 		} // if long option
@@ -257,7 +257,7 @@ func (opt *Options) ParseArgs(args []string) error {
 
 					} // switch o.Type
 				} else {
-					return ErrUnknownOption
+					return fmt.Errorf("-%c: %w", c, ErrUnknownOption)
 				} // if short option is defined
 			} // range s
 			continue
