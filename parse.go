@@ -49,6 +49,10 @@ func (opt *Options) ParseArgs(args []string) error {
 	//
 
 	for i, arg := range os.Args[1:] {
+		if arg == "" {
+			continue
+		}
+
 		if len(arg) < 2 {
 			unknown = append(unknown, arg)
 			continue
@@ -77,6 +81,7 @@ func (opt *Options) ParseArgs(args []string) error {
 						// We have the form "--option value"
 						if t {
 							o.Value = v
+							args[i+1] = ""
 							continue
 						}
 					}
@@ -90,8 +95,9 @@ func (opt *Options) ParseArgs(args []string) error {
 						continue
 					}
 
-					if len(args) > i+1 && args[i+1][0] != '-' {
+					if len(args) > i+1 {
 						o.Value = args[i+1]
+						args[i+1] = ""
 						continue
 					}
 
@@ -108,7 +114,6 @@ func (opt *Options) ParseArgs(args []string) error {
 						continue
 					}
 
-					// Since we allow negative numbers, we don't skip args starting with a minus.
 					if len(args) > i+1 {
 						v, err := strconv.Atoi(args[i+1])
 						if err != nil {
@@ -116,6 +121,7 @@ func (opt *Options) ParseArgs(args []string) error {
 						}
 
 						o.Value = v
+						args[i+1] = ""
 						continue
 					}
 
@@ -139,6 +145,7 @@ func (opt *Options) ParseArgs(args []string) error {
 						}
 
 						o.Value = v
+						args[i+1] = ""
 						continue
 					}
 
@@ -179,6 +186,7 @@ func (opt *Options) ParseArgs(args []string) error {
 							t, v := isTruthy(args[i+1])
 							if t {
 								o.Value = v
+								args[i+1] = ""
 								continue
 							}
 						}
@@ -193,6 +201,7 @@ func (opt *Options) ParseArgs(args []string) error {
 
 						if len(args) > i+1 {
 							o.Value = args[i+1]
+							args[i+1] = ""
 							continue
 						}
 
@@ -216,6 +225,7 @@ func (opt *Options) ParseArgs(args []string) error {
 							}
 
 							o.Value = v
+							args[i+1] = ""
 							continue
 						}
 
@@ -239,6 +249,7 @@ func (opt *Options) ParseArgs(args []string) error {
 							}
 
 							o.Value = v
+							args[i+1] = ""
 							continue
 						}
 
