@@ -4,7 +4,7 @@ import "errors"
 
 var (
 	// ErrMissingRequired is returned when a required option is missing.
-	ErrMissingRequired = errors.New("missing required option(s)")
+	ErrMissingRequired = errors.New("missing required option")
 	// ErrMissingArgument is returned when an option is missing an argument.
 	ErrMissingArgument = errors.New("missing argument")
 	// ErrLongShort is returned when a short option is longer than one character.
