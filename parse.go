@@ -167,7 +167,6 @@ func (opt *Options) ParseArgs(args []string) error {
 			for _, c := range s {
 				o, ok := opt.short[string(c)]
 				if ok {
-					fmt.Printf("Got boolean %c of type %d\n", c, o.Type)
 					switch o.Type {
 					case VarTypeBool:
 						if a[0] == string(c) && a[1] != "" {
