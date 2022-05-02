@@ -96,7 +96,11 @@ func (opt *Options) GetBool(name string) bool {
 	}
 
 	if o.Value == nil {
-		return o.Default.(bool)
+		if o.Default != nil {
+			return o.Default.(bool)
+		}
+
+		return false
 	}
 
 	return o.Value.(bool)
