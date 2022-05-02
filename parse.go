@@ -198,6 +198,26 @@ func (opt *Options) ParseArgs(args []string) error {
 
 						return fmt.Errorf("-%c: %w", c, ErrMissingArgument)
 
+					case VarTypeInt:
+						if a[0] == string(c) && a[1] != "" {
+							v, err := strconv.Atoi(a[1])
+							if err != nil {
+								return err
+							}
+
+							o.Value = v
+							continue
+						}
+
+						if len(args) > i+1 {
+							v, err := strconv.Atoi(args[i+1])
+							if err != nil {
+								return err
+							}
+
+							o.Value = v
+							continue
+						}
 					} // switch o.Type
 				} else {
 					return ErrUnknownOption
