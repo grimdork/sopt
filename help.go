@@ -9,7 +9,7 @@ import (
 
 // SetDefaultHelp sets the default help text.
 func (opt *Options) SetDefaultHelp() {
-	opt.SetOption("", "h", "help", "Print this help message", false, false, VarTypeBool, nil)
+	opt.SetOption("", "h", "help", "Print this help message.", nil, false, VarTypeBool, nil)
 	opt.hashelp = true
 }
 
@@ -46,10 +46,27 @@ func (opt *Options) PrintHelp() {
 
 			for _, o := range g.options {
 				if o.ShortName != "" && o.LongName != "" {
-					w.Write([]byte(fmt.Sprintf("\t-%s,--%s\t%s\n", o.ShortName, o.LongName, o.Help)))
-					continue
+					w.Write([]byte(fmt.Sprintf("\t-%s, --%s\t%s", o.ShortName, o.LongName, o.Help)))
 				}
-			}
+
+				if o.ShortName != "" && o.LongName == "" {
+					w.Write([]byte(fmt.Sprintf("\t-%s\t%s", o.ShortName, o.Help)))
+				}
+
+				if o.LongName != "" && o.ShortName == "" {
+					w.Write([]byte(fmt.Sprintf("\t--%s\t%s", o.LongName, o.Help)))
+				}
+
+				if o.Required {
+					w.Write([]byte(" (required)"))
+				}
+
+				if o.Default != nil {
+					w.Write([]byte(fmt.Sprintf(" (default: %v)", o.Default)))
+				}
+
+				w.Write([]byte("\n"))
+			} // for range g.options
 			w.Write([]byte("\n"))
 		}
 
