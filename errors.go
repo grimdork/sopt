@@ -13,6 +13,8 @@ var (
 	ErrUnknownOption = errors.New("unknown option")
 	// ErrEmptyLong is returned when a long option is empty.
 	ErrEmptyLong = errors.New("long option without a string")
+	// ErrShortLong is returned when a long option is shorter than two characters.
+	ErrShortLong = errors.New("long option must be at least two characters")
 	// ErrUnknownType is returned when an unknown option variable type is encountered.
 	ErrUnknownType = errors.New("unknown option type")
 )
