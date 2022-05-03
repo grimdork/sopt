@@ -72,7 +72,7 @@ func (opt *Options) RemoveGroup(name string) {
 }
 
 // GetOption returns a pointer to an option.
-func (opt *Options) GetOption(name string) (*Option, bool) {
+func (opt *Options) GetOption(name string) *Option {
 	var o *Option
 	var ok bool
 	if len(name) > 1 {
@@ -82,16 +82,16 @@ func (opt *Options) GetOption(name string) (*Option, bool) {
 	}
 
 	if !ok {
-		return nil, false
+		return nil
 	}
 
-	return o, true
+	return o
 }
 
 // GetBool returns a bool option's value.
 func (opt *Options) GetBool(name string) bool {
-	o, ok := opt.GetOption(name)
-	if !ok {
+	o := opt.GetOption(name)
+	if o == nil {
 		return false
 	}
 
@@ -108,8 +108,8 @@ func (opt *Options) GetBool(name string) bool {
 
 // GetString returns a string option's value.
 func (opt *Options) GetString(name string) string {
-	o, ok := opt.GetOption(name)
-	if !ok {
+	o := opt.GetOption(name)
+	if o == nil {
 		return ""
 	}
 
@@ -122,8 +122,8 @@ func (opt *Options) GetString(name string) string {
 
 // GetInt returns an int option's value.
 func (opt *Options) GetInt(name string) int {
-	o, ok := opt.GetOption(name)
-	if !ok {
+	o := opt.GetOption(name)
+	if o == nil {
 		return 0
 	}
 
@@ -136,8 +136,8 @@ func (opt *Options) GetInt(name string) int {
 
 // GetFloat returns a float option's value.
 func (opt *Options) GetFloat(name string) float64 {
-	o, ok := opt.GetOption(name)
-	if !ok {
+	o := opt.GetOption(name)
+	if o == nil {
 		return 0
 	}
 
