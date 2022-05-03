@@ -4,6 +4,8 @@ import "fmt"
 
 // Option definition.
 type Option struct {
+	// Placeholder is the placeholder variable shown in help text.
+	Placeholder string
 	// ShortName of the option.
 	ShortName string
 	// LongName of the option.

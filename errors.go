@@ -19,4 +19,6 @@ var (
 	ErrShortLong = errors.New("long option must be at least two characters")
 	// ErrUnknownType is returned when an unknown option variable type is encountered.
 	ErrUnknownType = errors.New("unknown option type")
+	// ErrNoPlaceholder is returned when a positional argument is missing a placeholder.
+	ErrNoPlaceholder = errors.New("no placeholder")
 )

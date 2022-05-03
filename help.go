@@ -34,6 +34,11 @@ func (opt *Options) PrintHelp() {
 		w.Write([]byte(" [COMMAND]"))
 	}
 
+	if len(opt.positional) > 0 {
+		for _, o := range opt.positional {
+			fmt.Fprintf(w, " [%s]", o.Placeholder)
+		}
+	}
 	w.Write([]byte("\n\n"))
 
 	for _, g := range opt.groups {
@@ -41,20 +46,20 @@ func (opt *Options) PrintHelp() {
 			if g.Name == "default" {
 				w.Write([]byte("Main options:\n"))
 			} else {
-				w.Write([]byte(fmt.Sprintf("%s options:\n", g.Name)))
+				fmt.Fprintf(w, "%s options:\n", g.Name)
 			}
 
 			for _, o := range g.options {
 				if o.ShortName != "" && o.LongName != "" {
-					w.Write([]byte(fmt.Sprintf("\t-%s, --%s\t%s", o.ShortName, o.LongName, o.Help)))
+					fmt.Fprintf(w, "\t-%s, --%s\t%s", o.ShortName, o.LongName, o.Help)
 				}
 
 				if o.ShortName != "" && o.LongName == "" {
-					w.Write([]byte(fmt.Sprintf("\t-%s\t%s", o.ShortName, o.Help)))
+					fmt.Fprintf(w, "\t-%s\t%s", o.ShortName, o.Help)
 				}
 
 				if o.LongName != "" && o.ShortName == "" {
-					w.Write([]byte(fmt.Sprintf("\t--%s\t%s", o.LongName, o.Help)))
+					fmt.Fprintf(w, "\t--%s\t%s", o.LongName, o.Help)
 				}
 
 				if o.Required {
@@ -62,7 +67,7 @@ func (opt *Options) PrintHelp() {
 				}
 
 				if o.Default != nil {
-					w.Write([]byte(fmt.Sprintf(" (default: %v)", o.Default)))
+					fmt.Fprintf(w, " (default: %v)", o.Default)
 				}
 
 				w.Write([]byte("\n"))
@@ -74,26 +79,33 @@ func (opt *Options) PrintHelp() {
 			if g.Name == "default" {
 				w.Write([]byte("Main commands:\n"))
 			} else {
-				w.Write([]byte(fmt.Sprintf("%s commands:\n", g.Name)))
+				fmt.Fprintf(w, "%s commands:\n", g.Name)
 			}
 
 			for _, cmd := range g.commands {
-				w.Write([]byte(fmt.Sprintf("\t%s\t%s", cmd, opt.commands[cmd].Help)))
+				fmt.Fprintf(w, "\t%s\t%s", cmd, opt.commands[cmd].Help)
 				if len(opt.commands[cmd].Aliases) > 0 {
-					w.Write([]byte(fmt.Sprintf(" (aliases: ")))
+					fmt.Fprintf(w, " (aliases: ")
 					for i, alias := range opt.commands[cmd].Aliases {
 						if i == 0 {
-							w.Write([]byte(fmt.Sprintf("%s", alias)))
+							fmt.Fprintf(w, "%s", alias)
 						} else {
-							w.Write([]byte(fmt.Sprintf(",%s", alias)))
+							fmt.Fprintf(w, ",%s", alias)
 						}
 					}
-					w.Write([]byte(fmt.Sprintf(")\n")))
+					fmt.Fprintf(w, ")\n")
 				}
 			}
 			w.Write([]byte("\n"))
 		}
 	}
 
+	if len(opt.positional) > 0 {
+		w.Write([]byte("Positional arguments:\n"))
+		for _, o := range opt.positional {
+			fmt.Fprintf(w, "\t%s\t%s", o.Placeholder, o.Help)
+		}
+		w.Write([]byte("\n"))
+	}
 	w.Flush()
 }

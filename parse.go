@@ -62,11 +62,7 @@ func (opt *Options) Parse(emptyhelp bool) error {
 // - Long options are followed by either whitespace or an equal sign ("--foo bar" or "--foo=bar").
 func (opt *Options) ParseArgs(args []string) error {
 	unknown := []string{}
-
-	//
-	// Long options
-	//
-
+	pos := opt.positional
 	for i, arg := range args {
 		if arg == "" {
 			continue
@@ -83,10 +79,14 @@ func (opt *Options) ParseArgs(args []string) error {
 			return nil
 		}
 
-		if len(arg) < 2 {
+		if len(arg) < 2 && len(opt.positional) < 0 {
 			unknown = append(unknown, arg)
 			continue
 		}
+
+		//
+		// Long options
+		//
 
 		if arg[0] == '-' && arg[1] == '-' {
 			arg = arg[2:]
@@ -292,6 +292,40 @@ func (opt *Options) ParseArgs(args []string) error {
 			} // range s
 			continue
 		} // if short option
+
+		if len(pos) > 0 {
+			switch pos[0].Type {
+			case VarTypeBool:
+				t, v := isTruthy(arg)
+				if t {
+					pos[0].Value = v
+				} else {
+					pos[0].Value = false
+				}
+
+			case VarTypeString:
+				pos[0].Value = arg
+
+			case VarTypeInt:
+				v, err := strconv.Atoi(arg)
+				if err != nil {
+					return err
+				}
+
+				pos[0].Value = v
+
+			case VarTypeFloat:
+				v, err := strconv.ParseFloat(arg, 64)
+				if err != nil {
+					return err
+				}
+
+				pos[0].Value = v
+			}
+
+			pos = pos[1:]
+			continue
+		}
 
 		unknown = append(unknown, arg)
 	}

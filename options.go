@@ -4,7 +4,8 @@ package sopt
 type Options struct {
 	short      map[string]*Option
 	long       map[string]*Option
-	positional map[string]*Option
+	positional []*Option
+	posmap     map[string]*Option
 	groups     map[string]*Group
 	commands   map[string]*Command
 	// Order of groups.
@@ -18,11 +19,11 @@ type Options struct {
 // New options instance.
 func New() *Options {
 	opt := &Options{
-		short:      make(map[string]*Option),
-		long:       make(map[string]*Option),
-		positional: make(map[string]*Option),
-		groups:     make(map[string]*Group),
-		commands:   make(map[string]*Command),
+		short:    make(map[string]*Option),
+		long:     make(map[string]*Option),
+		posmap:   make(map[string]*Option),
+		groups:   make(map[string]*Group),
+		commands: make(map[string]*Command),
 	}
 
 	opt.AddGroup("default")
