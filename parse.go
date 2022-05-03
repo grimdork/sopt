@@ -10,11 +10,11 @@ import (
 // ShowOptions shows the values of all options. Used for debugging.
 func (opt *Options) ShowOptions() {
 	for _, o := range opt.short {
-		fmt.Printf("-%s: %v\n", o.ShortName, o.Value)
+		fmt.Printf("-%s: %v (%v)\n", o.ShortName, o.Value, o.Default)
 	}
 
 	for _, o := range opt.long {
-		fmt.Printf("--%s: %v\n", o.LongName, o.Value)
+		fmt.Printf("--%s: %v (%v)\n", o.LongName, o.Value, o.Default)
 	}
 }
 
