@@ -63,21 +63,6 @@ func TestRemoveLastGroup(t *testing.T) {
 	}
 }
 
-func TestBool(t *testing.T) {
-	opt := sopt.New()
-	opt.SetOption("", "v", "verbose", "Show more details in output.", false, false, sopt.VarTypeBool, nil)
-}
-
-func TestString(t *testing.T) {
-	opt := sopt.New()
-	opt.SetOption("", "f", "file", "Full file path.", "", false, sopt.VarTypeString, nil)
-}
-
-func TestInt(t *testing.T) {
-	opt := sopt.New()
-	opt.SetOption("", "p", "port", "Port number.", 3000, false, sopt.VarTypeInt, nil)
-}
-
 func TestSortGroup(t *testing.T) {
 	opt := sopt.New()
 	opt.SetOption("", "v", "verbose", "Show more details in output.", false, false, sopt.VarTypeBool, nil)
@@ -114,6 +99,58 @@ func TestAutoGroup(t *testing.T) {
 	list := opt.GetGroups()
 	if list[1].Name != "General" {
 		t.Errorf("Expected 'General' group, but got %s", list[1].Name)
+		t.Fail()
+	}
+}
+
+func TestLongShort(t *testing.T) {
+	err := sopt.New().SetOption("", "verbose", "", "", false, false, sopt.VarTypeBool, nil)
+	if err == nil {
+		t.Errorf("Expected error, but long short worked.")
+		t.Fail()
+	} else {
+		t.Log("Long short failed as expected.")
+	}
+}
+
+func TestShortLong(t *testing.T) {
+	err := sopt.New().SetOption("", "", "v", "", false, false, sopt.VarTypeBool, nil)
+	if err == nil {
+		t.Errorf("Expected error, but short long worked.")
+		t.Fail()
+	} else {
+		t.Log("Short long failed as expected.")
+	}
+}
+
+func TestBool(t *testing.T) {
+	opt := sopt.New()
+	opt.SetOption("", "v", "verbose", "Show more details in output.", false, false, sopt.VarTypeBool, nil)
+}
+
+func TestString(t *testing.T) {
+	opt := sopt.New()
+	opt.SetOption("", "f", "file", "Full file path.", "", false, sopt.VarTypeString, nil)
+}
+
+func TestInt(t *testing.T) {
+	opt := sopt.New()
+	err := opt.SetOption("", "p", "port", "Port number.", 3000, false, sopt.VarTypeInt, nil)
+	if err != nil {
+		t.Errorf("Expected no error, but got %s", err.Error())
+		t.FailNow()
+	}
+
+	args := []string{"-p", "4000"}
+	err = opt.ParseArgs(args)
+	if err != nil {
+		t.Errorf("Expected no error, but got %s", err.Error())
+		t.FailNow()
+	}
+
+	if opt.GetInt("p") != 4000 {
+		t.Errorf("Expected -p=4000, but got %d", opt.GetInt("p"))
+		opt.ShowOptions()
 		t.Fail()
 	}
 }
