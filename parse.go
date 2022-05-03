@@ -48,7 +48,7 @@ func (opt *Options) ParseArgs(args []string) error {
 	// Long options
 	//
 
-	for i, arg := range os.Args[1:] {
+	for i, arg := range args {
 		if arg == "" {
 			continue
 		}
