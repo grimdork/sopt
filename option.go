@@ -1,5 +1,7 @@
 package sopt
 
+import "fmt"
+
 // Option definition.
 type Option struct {
 	// ShortName of the option.
@@ -37,7 +39,11 @@ const (
 // SetOption sets an option.
 func (opt *Options) SetOption(group, short, long, help string, defaultvalue any, required bool, t uint8, choices []any) error {
 	if len(short) > 1 {
-		return ErrLongShort
+		return fmt.Errorf("-%s: %w", short, ErrLongShort)
+	}
+
+	if len(long) == 1 {
+		return fmt.Errorf("--%s: %w", long, ErrShortLong)
 	}
 
 	g := opt.GetGroup(group)
