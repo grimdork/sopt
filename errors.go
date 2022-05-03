@@ -7,6 +7,8 @@ var (
 	ErrMissingRequired = errors.New("missing required option")
 	// ErrMissingArgument is returned when an option is missing an argument.
 	ErrMissingArgument = errors.New("missing argument")
+	// ErrMissingFunc is returned when a command is missing a function.
+	ErrMissingFunc = errors.New("missing function")
 	// ErrLongShort is returned when a short option is longer than one character.
 	ErrLongShort = errors.New("short option must be one character")
 	// ErrUnknownOption is returned when an undefined option is encountered.

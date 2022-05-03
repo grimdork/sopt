@@ -19,18 +19,37 @@ func (opt *Options) ShowOptions() {
 }
 
 // Parse the command line arguments from os.Args. Internally it calls ParseArgs.
-// This will force an os.Exit(0) if help is requested, or if no args are given and emptyhelp is true.
+// - If default help is defined, it will print the help message after parsing when "-h" or "--help" is supplied,
+// then os.Exit(0).
+// - If emptyhelp is true and no arguments are supplied, it will print the help message and os.Exit(0).
 func (opt *Options) Parse(emptyhelp bool) error {
 	if len(os.Args) == 1 && emptyhelp {
 		opt.PrintHelp()
 		os.Exit(0)
 	}
 
-	return opt.ParseArgs(os.Args[1:])
+	err := opt.ParseArgs(os.Args[1:])
+	if err != nil {
+		return err
+	}
+
+	if opt.hashelp && opt.GetBool("h") {
+		opt.PrintHelp()
+		os.Exit(0)
+	}
+
+	return nil
 }
 
 // ParseArgs parses the supplied string slice as CLI arguments.
-// It starts by parsing short and long options.
+// Tool commands, short options (single dash and one letter), long options (double dash and one or more
+// letters), and positional arguments are each paarsed in the order they are supplied.
+//
+// Single- and double-dash options found before any tool commands are parsed for the Options structure.
+//
+// Tool commands break the parsing off, and calls the command with the remaining arguments after running
+//  any handlers for the pre-command options.
+// Options criteria:
 // - Short options start with a single dash ("-").
 // - Short boolean options don't need to take a value.
 // - Short boolean options require an equal sign ("=") after the option with a truthy or falsy value.
@@ -51,6 +70,17 @@ func (opt *Options) ParseArgs(args []string) error {
 	for i, arg := range args {
 		if arg == "" {
 			continue
+		}
+
+		cmd := opt.commands[arg]
+		if cmd != nil {
+			fn := cmd.Func
+			if fn == nil {
+				return fmt.Errorf("%s: %s", arg, ErrMissingFunc)
+			}
+
+			fn(args[i+1:])
+			return nil
 		}
 
 		if len(arg) < 2 {

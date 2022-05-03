@@ -1,6 +1,7 @@
 package sopt_test
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/grimdork/sopt"
@@ -151,6 +152,32 @@ func TestInt(t *testing.T) {
 	if opt.GetInt("p") != 4000 {
 		t.Errorf("Expected -p=4000, but got %d", opt.GetInt("p"))
 		opt.ShowOptions()
+		t.Fail()
+	}
+}
+
+const moo = `                 (__)
+                 (oo)
+           /------\/
+          / |    ||
+         *  /\---/\
+            ~~   ~~
+..."Have you mooed today?"...
+`
+
+func moocmd(args []string) error {
+	println(moo)
+	fmt.Printf("Args: %+v\n", args)
+	return nil
+}
+
+func TestCommand(t *testing.T) {
+	opt := sopt.New()
+	opt.SetCommand("moo", "Have you mooed today?", "", moocmd, nil)
+	args := []string{"moo", "--help"}
+	err := opt.ParseArgs(args)
+	if err != nil {
+		t.Errorf("Expected no error, but got %s", err.Error())
 		t.Fail()
 	}
 }

@@ -17,8 +17,8 @@ type Command struct {
 // ToolCommand function signature.
 type ToolCommand func(args []string) error
 
-// AddCommand to a group.
-func (opt *Options) AddCommand(name, help, group string, fn ToolCommand, aliases []string) *Command {
+// SetCommand to a group.
+func (opt *Options) SetCommand(name, help, group string, fn ToolCommand, aliases []string) *Command {
 	cmd := &Command{
 		Name:    name,
 		Help:    help,
