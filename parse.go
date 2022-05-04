@@ -43,7 +43,8 @@ func (opt *Options) Parse(emptyhelp bool) error {
 
 // ParseArgs parses the supplied string slice as CLI arguments.
 // Tool commands, short options (single dash and one letter), long options (double dash and one or more
-// letters), and positional arguments are each paarsed in the order they are supplied.
+// letters), and positional arguments are each paarsed in the order they are supplied. If a positional
+// argument is of a slice type, it will swallow all remaining arguments, including long and short options.
 //
 // Single- and double-dash options found before any tool commands are parsed for the Options structure.
 //
@@ -79,7 +80,7 @@ func (opt *Options) ParseArgs(args []string) error {
 			return nil
 		}
 
-		if len(arg) < 2 && len(opt.positional) < 0 {
+		if len(arg) < 2 && len(pos) < 0 {
 			unknown = append(unknown, arg)
 			continue
 		}
@@ -305,6 +306,14 @@ func (opt *Options) ParseArgs(args []string) error {
 
 			case VarTypeString:
 				pos[0].Value = arg
+
+			case VarTypePosStringSlice:
+				if pos[0].Value == nil {
+					pos[0].Value = []string{}
+				}
+
+				pos[0].Value = append(pos[0].Value.([]string), arg)
+				continue
 
 			case VarTypeInt:
 				v, err := strconv.Atoi(arg)

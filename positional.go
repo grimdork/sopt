@@ -57,3 +57,21 @@ func (opt *Options) GetPosString(placeholder string) string {
 
 	return o.Value.(string)
 }
+
+// GetPosStringSlice returns a positional string slice's values.
+func (opt *Options) GetPosStringSlice(placeholder string) []string {
+	o := opt.posmap[placeholder]
+	if o == nil {
+		return nil
+	}
+
+	if o.Value == nil {
+		if o.Default != nil {
+			return o.Default.([]string)
+		}
+
+		return nil
+	}
+
+	return o.Value.([]string)
+}
