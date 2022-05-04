@@ -30,6 +30,10 @@ func (opt *Options) PrintHelp() {
 		w.Write([]byte(" [OPTIONS]"))
 	}
 
+	if len(opt.short)+len(opt.long) > 1 {
+		w.Write([]byte("..."))
+	}
+
 	if len(opt.commands) > 0 {
 		w.Write([]byte(" [COMMAND]"))
 	}
