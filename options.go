@@ -115,10 +115,32 @@ func (opt *Options) GetString(name string) string {
 	}
 
 	if o.Value == nil {
-		return o.Default.(string)
+		if o.Default != nil {
+			return o.Default.(string)
+		}
+
+		return ""
 	}
 
 	return o.Value.(string)
+}
+
+// GetStringSlice returns a string slice option's value.
+func (opt *Options) GetStringSlice(name string) []string {
+	o := opt.GetOption(name)
+	if o == nil {
+		return []string{}
+	}
+
+	if o.Value == nil {
+		if o.Default != nil {
+			return o.Default.([]string)
+		}
+
+		return []string{}
+	}
+
+	return o.Value.([]string)
 }
 
 // GetInt returns an int option's value.
@@ -129,7 +151,11 @@ func (opt *Options) GetInt(name string) int {
 	}
 
 	if o.Value == nil {
-		return o.Default.(int)
+		if o.Default != nil {
+			return o.Default.(int)
+		}
+
+		return 0
 	}
 
 	return o.Value.(int)
@@ -139,11 +165,15 @@ func (opt *Options) GetInt(name string) int {
 func (opt *Options) GetFloat(name string) float64 {
 	o := opt.GetOption(name)
 	if o == nil {
-		return 0
+		return 0.0
 	}
 
 	if o.Value == nil {
-		return o.Default.(float64)
+		if o.Default != nil {
+			return o.Default.(float64)
+		}
+
+		return 0.0
 	}
 
 	return o.Value.(float64)
