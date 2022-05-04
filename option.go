@@ -38,6 +38,8 @@ const (
 	VarTypeString
 	// VarTypeStringSlice option.
 	VarTypeStringSlice
+	// VarTypePosStringSlice option.
+	VarTypePosStringSlice
 )
 
 // SetOption sets an option.
