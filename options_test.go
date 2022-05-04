@@ -274,3 +274,28 @@ func TestPositional(t *testing.T) {
 		t.Log("File path is as expected.")
 	}
 }
+
+func TestSPositionalSlice(t *testing.T) {
+	opt := sopt.New()
+	err := opt.SetPositional("FILE", "Full file path.", nil, false, sopt.VarTypePosStringSlice)
+	if err != nil {
+		t.Errorf("Expected no error, but got %s", err.Error())
+		t.FailNow()
+	}
+
+	opt.PrintHelp()
+	args := []string{"test.txt", "test2.txt"}
+	err = opt.ParseArgs(args)
+	if err != nil {
+		t.Errorf("Expected no error, but got %s", err.Error())
+		t.Fail()
+	}
+
+	files := opt.GetPosStringSlice("FILE")
+	if len(files) != 2 {
+		t.Errorf("Expected 2 files, but got %d", len(files))
+		t.Fail()
+	} else {
+		t.Logf("File paths are as expected: %+v", files)
+	}
+}
