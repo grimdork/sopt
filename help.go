@@ -41,6 +41,9 @@ func (opt *Options) PrintHelp() {
 	if len(opt.positional) > 0 {
 		for _, o := range opt.positional {
 			fmt.Fprintf(w, " [%s]", o.Placeholder)
+			if o.Type == VarTypePosStringSlice {
+				fmt.Fprintf(w, "...")
+			}
 		}
 	}
 	w.Write([]byte("\n\n"))
