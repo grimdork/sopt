@@ -36,6 +36,8 @@ const (
 	VarTypeFloat
 	// 	VarTypeString option.
 	VarTypeString
+	// VarTypeStringSlice option.
+	VarTypeStringSlice
 )
 
 // SetOption sets an option.
